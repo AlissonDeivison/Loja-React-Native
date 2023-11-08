@@ -1,13 +1,18 @@
-import Cadastro from "./src/routes/Cadastro";
-import Login from "./src/routes/Login";
-
+import { NavigationContainer, NavigationRouteContext } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Login from "./src/pages/Login";
 
 const App = () => {
-  return (
-    <>
-      <Login />
-    </>
 
+  const Stack = createNativeStackNavigator()
+
+  return (
+    
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="login" component={Login}></Stack.Screen>
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
