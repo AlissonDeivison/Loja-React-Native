@@ -19,7 +19,7 @@ const App = () => {
         <Stack.Screen options={{headerShown:false}} name="login" component={Login}></Stack.Screen>
         <Stack.Screen options={{title: 'Criar Usuário', headerTintColor:'#FD91E4'}} name="createAccount" component={CreateAccount}></Stack.Screen>
         <Stack.Screen options={{title: 'Recuperar Senha', headerTintColor:'#FD91E4'}} name="forgotPassword" component={ForgotPassword}></Stack.Screen>
-        <Stack.Screen options={{title: 'Home', headerTintColor:'#FD91E4'}} name="home" component={Home}></Stack.Screen>
+        <Stack.Screen options={{title: 'Home', headerTintColor:'#FD91E4', headerShown:false}} name="home" component={Home}></Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );

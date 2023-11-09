@@ -9,6 +9,8 @@ const styles = StyleSheet.create({
     },
     title:{
       fontSize: 18,
+      alignSelf:'center',
+      marginBottom:'20%',
     },
     input: {
       height: 40,
@@ -17,7 +19,8 @@ const styles = StyleSheet.create({
       borderWidth: 1,
       marginTop: "3%",
       marginBottom: "5%",
-      borderRadius: 15
+      borderRadius: 15,
+      padding: 6
     },
   
     createForgotLink: {
