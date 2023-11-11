@@ -1,5 +1,6 @@
 import React from 'react'
-import { Button, Text, TextInput, View, Image } from 'react-native'
+import { Text, TextInput, View, Image } from 'react-native'
+import { Button } from '@rneui/base'
 import styles from './styles'
 
 
@@ -18,11 +19,13 @@ export default function Login({navigation}:any) {
         <TextInput style={styles.input} />
         <Text>Senha</Text>
         <TextInput secureTextEntry={true} style={styles.input} />
-        <View style={styles.createForgotLink}>
-          <Text onPress={() => { navigation.navigate('createAccount') }} style={styles.links}>Criar uma conta</Text>
-          <Text onPress={() => { navigation.navigate('forgotPassword') }} style={styles.links}>Esqueci a senha</Text>
-        </View>
-        <Button onPress={() => { navigation.navigate('home') }} title="Entrar" />
+        <Button
+          title="Log in"
+          buttonStyle={styles.buttonLogin}
+          containerStyle={styles.buttonLoginContainer}
+          titleStyle={styles.buttonLoginTitle}
+          onPress={() => {navigation.navigate('market')}}
+        />
       </View>
     </View>
   )

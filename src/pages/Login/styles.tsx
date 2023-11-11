@@ -1,5 +1,16 @@
 
-import { StyleSheet } from "react-native";
+import { StyleSheet, ImageStyle, ViewStyle, TextStyle } from "react-native";
+
+export interface Styles {
+  logo_img: ImageStyle,
+  buttonsContainer: ViewStyle,
+  buttonLogin: ViewStyle,
+  buttonLoginContainer: ViewStyle,
+  buttonLoginTitle: TextStyle,
+}
+
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -16,11 +27,6 @@ const styles = StyleSheet.create({
     marginBottom: "5%",
     borderRadius: 15
   },
-  createForgotLink: {
-    flexDirection: "row",
-    alignContent:"space-between",
-    alignSelf: "flex-end",
-  },
   links: {
     marginLeft: 8,
     marginBottom: 10,
@@ -36,6 +42,19 @@ const styles = StyleSheet.create({
   logo_img: {
     height: '55%',
     resizeMode: 'contain'
+  },
+  buttonLogin: {
+    backgroundColor: '#F88DBE',
+    borderRadius: 30,
+    marginBottom: 20,
+  },
+  buttonLoginContainer: {
+    width: 200,
+    alignSelf:'center'
+  },
+  buttonLoginTitle: {
+    fontWeight: 'bold',
+    color:'#FFFFFF',
   }
 });
 
