@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react'
-import { ScrollView, Text } from 'react-native'
+import React, { useState, useEffect, useLayoutEffect } from 'react'
+import { ScrollView, Text, TouchableOpacity } from 'react-native'
 import styles from './styles';
 import Cakes from './Cakes';
-import ShoppingCart from './ShoppingCart';
+import { useNavigation } from '@react-navigation/native';
+import Icon from "react-native-vector-icons/AntDesign"
 
 
 export interface Produto {
@@ -16,6 +17,22 @@ export interface Produto {
 export default function Market() {
     
     const [shoppingCart, setShoppingCart] = useState<Produto[]>([])
+    const navigation = useNavigation();
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+          headerRight: () => (
+            <TouchableOpacity onPress={() => navigation.navigate('login')}>
+              <Icon name="logout" size={28} />
+            </TouchableOpacity>
+          ),
+          headerLeft:() => (
+            <TouchableOpacity onPress={() => navigation.navigate('shoppingCart', {shoppingCart})}>
+              <Icon name="shoppingcart" size={28} />
+            </TouchableOpacity>
+          ),
+        });
+      }, [navigation]);
     
     const verificarCarrinho = () => {
         shoppingCart.map((produto)=>{
@@ -25,12 +42,12 @@ export default function Market() {
 
     useEffect(()=>{
         verificarCarrinho()
+        
     },[setShoppingCart]);
     
     return (
         <ScrollView style={styles.container}>
             <Cakes setShoppingCart={setShoppingCart}/>
-            <ShoppingCart shoppingCart={shoppingCart} />
         </ScrollView>
     )
 }

@@ -1,4 +1,4 @@
-import { NavigationContainer, NavigationRouteContext } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from "./src/pages/Login";
 import CreateAccount from "./src/pages/CreateAccount";
@@ -7,14 +7,13 @@ import PreLoadingScreen from "./src/pages/PreLoadingScreen";
 import Home from "./src/pages/Home";
 import Market from "./src/pages/Market";
 import Icon from "react-native-vector-icons/AntDesign"
-
+import ShoppingCart from "./src/pages/Market/ShoppingCart";
 
 const App = () => {
 
-  const Stack = createNativeStackNavigator()
+  const Stack = createNativeStackNavigator();
 
   return (
-
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="preloading" options={{ headerShown: false }} component={PreLoadingScreen}></Stack.Screen>
@@ -26,9 +25,8 @@ const App = () => {
           title: 'Ofertas',
           headerBackVisible: false,
           headerTitleAlign: 'center',
-          headerLeft: () => (<Icon name="shoppingcart" size={28}></Icon>),
-          headerRight: () => (<Icon name="logout" size={24}></Icon>)
         }} name="market" component={Market}></Stack.Screen>
+        <Stack.Screen options={{ headerShown: true, title: 'Carrinho de Compras', headerTintColor: '#FD91E4' }} name="shoppingCart" component={ShoppingCart}></Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );
