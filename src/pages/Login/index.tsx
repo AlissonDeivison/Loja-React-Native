@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Text, TextInput, View, Image } from 'react-native'
 import { Button } from '@rneui/base'
 import styles from './styles'
 
 
 export default function Login({navigation}:any) {
+
+  const [shoppingCart, setShoppingCart] = useState([]);
+
   return (
     <View style={styles.container}>
       <View style={styles.logo}>

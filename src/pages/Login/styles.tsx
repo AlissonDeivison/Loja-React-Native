@@ -9,8 +9,6 @@ export interface Styles {
   buttonLoginTitle: TextStyle,
 }
 
-
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

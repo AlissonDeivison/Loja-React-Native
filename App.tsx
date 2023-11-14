@@ -6,6 +6,7 @@ import ForgotPassword from "./src/pages/ForgotPassword";
 import PreLoadingScreen from "./src/pages/PreLoadingScreen";
 import Home from "./src/pages/Home";
 import Market from "./src/pages/Market";
+import Icon from "react-native-vector-icons/AntDesign"
 
 
 const App = () => {
@@ -13,15 +14,21 @@ const App = () => {
   const Stack = createNativeStackNavigator()
 
   return (
-    
+
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="preloading" options={{headerShown:false}} component={PreLoadingScreen}></Stack.Screen>
-        <Stack.Screen options={{headerShown:true, title:'Entrar', headerTintColor:'#FD91E4'}} name="login" component={Login}></Stack.Screen>
-        <Stack.Screen options={{title: 'Criar Usuário', headerTintColor:'#FD91E4'}} name="createAccount" component={CreateAccount}></Stack.Screen>
-        <Stack.Screen options={{title: 'Recuperar Senha', headerTintColor:'#FD91E4'}} name="forgotPassword" component={ForgotPassword}></Stack.Screen>
-        <Stack.Screen options={{title: 'Home', headerTintColor:'#FD91E4', headerShown:false}} name="home" component={Home}></Stack.Screen>
-        <Stack.Screen  options= {{headerShown:false}} name="market" component={Market}></Stack.Screen>
+        <Stack.Screen name="preloading" options={{ headerShown: false }} component={PreLoadingScreen}></Stack.Screen>
+        <Stack.Screen options={{ headerShown: true, title: 'Entrar', headerTintColor: '#FD91E4' }} name="login" component={Login}></Stack.Screen>
+        <Stack.Screen options={{ title: 'Criar Usuário', headerTintColor: '#FD91E4' }} name="createAccount" component={CreateAccount}></Stack.Screen>
+        <Stack.Screen options={{ title: 'Recuperar Senha', headerTintColor: '#FD91E4' }} name="forgotPassword" component={ForgotPassword}></Stack.Screen>
+        <Stack.Screen options={{ title: 'Home', headerTintColor: '#FD91E4', headerShown: false }} name="home" component={Home}></Stack.Screen>
+        <Stack.Screen options={{
+          title: 'Ofertas',
+          headerBackVisible: false,
+          headerTitleAlign: 'center',
+          headerLeft: () => (<Icon name="shoppingcart" size={28}></Icon>),
+          headerRight: () => (<Icon name="logout" size={24}></Icon>)
+        }} name="market" component={Market}></Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );
