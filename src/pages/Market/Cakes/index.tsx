@@ -27,7 +27,7 @@ function gerarProduto(fatias, recheio, descricao, orcamento) {
     };
     return produto;
 }
-export default function Cakes({ setShoppingCart }) {
+export default function Cakes({ setShoppingCart, shoppingCart }) {
 
     const [fatias, setFatias] = useState(null)
     const [recheio, setRecheio] = useState(null)
@@ -70,10 +70,9 @@ export default function Cakes({ setShoppingCart }) {
                 onPress={() => {
                     try {
                         const produto = gerarProduto(fatias, recheio, descricao, orcamento(fatias).toFixed(2));
-                        setShoppingCart(produto)
-                        console.log(produto);
+                        setShoppingCart(oldCart => [...oldCart, produto]);
                     }catch (err){
-                        
+                        console.log(err)
                     }
                 }}
             />
