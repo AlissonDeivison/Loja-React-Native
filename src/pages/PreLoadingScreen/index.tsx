@@ -11,10 +11,9 @@ export default function PreLoadingScreen() {
 
   const navigation = useNavigation();
 
-
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigation.navigate('home');
+      navigation.navigate('Home');
     }, 2000); // Atraso de 2 segundos
 
     return () => clearTimeout(timer); // Limpar o timer se o componente for desmontado

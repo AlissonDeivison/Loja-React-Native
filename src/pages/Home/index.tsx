@@ -27,17 +27,17 @@ export default function Home() {
           buttonStyle={styles.buttonSignUp}
           containerStyle={styles.buttonSignUpContainer}
           titleStyle={styles.buttonSignUpTitle}
-          onPress={() => {navigation.navigate('createAccount')}}
+          onPress={() => {navigation.navigate('CreateAccount')}}
         />
         <Button
           title="Log in"
           buttonStyle={styles.buttonLogin}
           containerStyle={styles.buttonLoginContainer}
           titleStyle={styles.buttonLoginTitle}
-          onPress={() => {navigation.navigate('login')}}
+          onPress={() => {navigation.navigate('Login')}}
         />
         <View>
-          <Text onPress={() => { navigation.navigate('forgotPassword') }} style={styles.forgotLink}>Esqueci a senha</Text>
+          <Text onPress={() => { navigation.navigate('ForgotPassword') }} style={styles.forgotLink}>Esqueci a senha</Text>
         </View>
       </View>
     </LinearGradient>

@@ -27,34 +27,11 @@ function gerarProduto(fatias, recheio, descricao, orcamento) {
     };
     return produto;
 }
-export default function Cakes({ setShoppingCart, shoppingCart }) {
+export default function Cakes({ setShoppingCart }) {
 
     const [fatias, setFatias] = useState(null)
     const [recheio, setRecheio] = useState(null)
     const [descricao, setDescricao] = useState(null)
-
-    //Bloco de código usado apenas na depuração
-    // useEffect(() => {
-    //     if (fatias !== null) {
-    //         numeroFatias = Number(fatias);
-    //         if (numeroFatias !== 0) {
-    //             valorOrcamento = orcamento(numeroFatias).toFixed(2)
-    //             console.log(`R$: ${valorOrcamento}`)
-    //         }
-    //     }
-    // }, [fatias]);
-
-    // useEffect(() => {
-    //     if (recheio !== null) {
-    //         console.log(recheio);
-    //     }
-    // }, [recheio]);
-    
-    // useEffect(() => {
-    //     if (descricao !== null) {
-    //         console.log(descricao);
-    //     }
-    // }, [descricao]);
 
     return (
         <View>

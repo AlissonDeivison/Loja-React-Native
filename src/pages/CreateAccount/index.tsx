@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, TextInput, Button } from 'react-native'
+import { View, Text, TextInput } from 'react-native'
 import styles from './styles'
+import { Button } from '@rneui/base'
 
-export default function Cadastro() {
-
+export default function CreateAccount() {
     interface User {
         full_name: String,
         login: String,
@@ -15,19 +15,18 @@ export default function Cadastro() {
     const [login, setLogin] = useState<String>('');
     const [password, setPassword] = useState<String>('');
 
-    const listUsers = (array:any)=>{
-        array.map((user:User) => {console.log(user)})
-        console.log('___________')
+    const listUsers = (array: any) => {
+        array.map((user: User) => { console.log(user) })
     }
-    
+
 
     const setNewUser = () => {
-        let new_user: User={full_name,login,password};
-        setUser(prevUsers => prevUsers ? [...prevUsers, new_user]:[new_user]);
+        let new_user: User = { full_name, login, password };
+        setUser(prevUsers => prevUsers ? [...prevUsers, new_user] : [new_user]);
     }
 
     useEffect(() => {
-        if(user) {
+        if (user) {
             listUsers(user);
         }
     }, [user]);
@@ -40,8 +39,14 @@ export default function Cadastro() {
             <Text>Login</Text>
             <TextInput style={styles.input} onChangeText={text => setLogin(text)} />
             <Text>Senha</Text>
-            <TextInput style={styles.input} secureTextEntry={true} onChangeText={text => setPassword(text)}/>
-            <Button title="Cadastrar" onPress={()=>(setNewUser())}/>
+            <TextInput style={styles.input} secureTextEntry={true} onChangeText={text => setPassword(text)} />
+            <Button
+                title="Cadastrar"
+                buttonStyle={styles.buttonRegister}
+                containerStyle={styles.buttonRegisterContainer}
+                titleStyle={styles.buttonRegisterTitle}
+                onPress={() => (setNewUser())}
+            />
         </View>
     )
 }

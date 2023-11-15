@@ -1,4 +1,12 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, TextStyle, ViewStyle } from "react-native";
+
+
+export interface Styles {
+  buttonsContainer: ViewStyle,
+  buttonRegister: ViewStyle,
+  buttonRegisterContainer: ViewStyle,
+  buttonRegisterTitle: TextStyle,
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -31,6 +39,19 @@ const styles = StyleSheet.create({
       marginLeft:8,
       marginBottom:10,
       color:"#2196F3"
+    },
+    buttonRegister: {
+      backgroundColor: '#F88DBE',
+      borderRadius: 30,
+      marginBottom: 20,
+    },
+    buttonRegisterContainer: {
+      width: 200,
+      alignSelf:'center'
+    },
+    buttonRegisterTitle: {
+      fontWeight: 'bold',
+      color:'#FFFFFF',
     }
   });
   export default styles;

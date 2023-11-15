@@ -1,12 +1,26 @@
-import React, { useState } from 'react'
+
 import { Text, TextInput, View, Image } from 'react-native'
 import { Button } from '@rneui/base'
 import styles from './styles'
+import { useState } from 'react';
 
 
-export default function Login({navigation}:any) {
+export default function Login({ navigation }: any) {
 
-  const [shoppingCart, setShoppingCart] = useState([]);
+  const [login, setLogin] = useState(null);
+  const [senha, setSenha] = useState(null);
+  const [erro, setErro] = useState(null);
+
+
+  function acessar(login: string, senha: string) {
+    try {
+      if (login === 'Admin' && senha === 'Admin') {
+         navigation.navigate('Market')
+      }
+    } catch (err) {
+      setErro('Login ou senha inválidos!')
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -17,18 +31,19 @@ export default function Login({navigation}:any) {
         />
         <Text style={styles.text}>Jully's Cakes</Text>
       </View>
-      <View style={{marginTop:'-30%'}}>
+      <View style={{ marginTop: '-30%' }}>
         <Text>Login</Text>
-        <TextInput style={styles.input} />
+        <TextInput style={styles.input} value={login} onChangeText={setLogin} />
         <Text>Senha</Text>
-        <TextInput secureTextEntry={true} style={styles.input} />
+        <TextInput secureTextEntry={true} style={styles.input} value={senha} onChangeText={setSenha} />
         <Button
           title="Log in"
           buttonStyle={styles.buttonLogin}
           containerStyle={styles.buttonLoginContainer}
           titleStyle={styles.buttonLoginTitle}
-          onPress={() => {navigation.navigate('market')}}
-        />
+          onPress={() => acessar(login, senha)}
+          />
+          {erro ? <Text>{erro}</Text> : null}
       </View>
     </View>
   )
