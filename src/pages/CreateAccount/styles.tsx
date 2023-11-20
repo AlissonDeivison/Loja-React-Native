@@ -30,6 +30,14 @@ const styles = StyleSheet.create({
       borderRadius: 15,
       padding: 6
     },
+
+    errorMessage:{
+      textAlign:'center',
+      fontSize: 10,
+      marginTop: '-4%',
+      color: '#C80000'
+    },
+
   
     createForgotLink: {
       flexDirection:"row",
