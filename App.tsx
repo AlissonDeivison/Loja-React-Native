@@ -9,13 +9,30 @@ import Market from "./src/pages/Market";
 import Icon from "react-native-vector-icons/AntDesign"
 import ShoppingCart from "./src/pages/Market/ShoppingCart";
 import { CartProvider } from "./src/pages/CartContext";
+import app from './src/Config'
+import { useEffect, useState } from "react";
+import { getFirestore, collection, getDocs } from 'firebase/firestore'
 
-
-
-const App = (): JSX.Element => {
-
+const App = () => {
   const Stack = createNativeStackNavigator();
+  const [dados, setDados] = useState([]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const db = getFirestore(app);
+      const querySnapshot = await getDocs(collection(db, "usuarios"));
+      querySnapshot.forEach((doc) => {
+        // console.log(doc.id, " => ", doc.data());
+        setDados(dadosAnteriores => [...dadosAnteriores, doc.data()]);
+      });
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    dados.map((dado) => console.log(dado))
+    console.log('-----------------------')
+  }, [dados])
 
   return (
     <CartProvider>

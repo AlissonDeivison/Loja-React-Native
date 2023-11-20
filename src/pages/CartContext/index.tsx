@@ -15,7 +15,7 @@ interface CartContextType {
 
 export const CartContext = createContext<CartContextType>({ shoppingCart: [], setShoppingCart: () => {} });
 
-export const CartProvider: React.FC = ({ children }:any) => {
+export const CartProvider: React.FC <{children: React.ReactNode}> = ({ children }) => {
   const [shoppingCart, setShoppingCart] = useState<Produto[]>([]);
 
   return (
