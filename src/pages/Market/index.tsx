@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useLayoutEffect, useContext } from 'react'
-import { ScrollView, Text, TouchableOpacity } from 'react-native'
+import React, { useEffect, useContext } from 'react'
+import { ScrollView } from 'react-native'
 import styles from './styles';
 import Cakes from './Cakes';
 import { CartContext } from '../CartContext';

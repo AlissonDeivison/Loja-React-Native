@@ -5,7 +5,9 @@ import styles from './styles'
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient'
 import { collection, getDocs, getFirestore } from 'firebase/firestore';
-import app from '../../Config'
+
+
+import app from '../../Services'
 
 
 

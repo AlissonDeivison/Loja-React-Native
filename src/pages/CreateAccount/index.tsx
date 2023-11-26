@@ -2,44 +2,67 @@ import React, { useEffect, useState } from 'react'
 import { View, Text, TextInput, Alert } from 'react-native'
 import styles from './styles'
 import { Button } from '@rneui/base'
-import app from '../../Config'
-import { getFirestore, doc, setDoc, addDoc, collection } from 'firebase/firestore'
 import { useNavigation } from '@react-navigation/native'
+
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../Services';
 
 
 export default function CreateAccount() {
     interface User {
-        full_name: String,
-        email: String,
-        password: String
+        full_name: string,
+        email: string,
+        password: string
     }
     //Importação do banco de dados
 
-    const db = getFirestore(app);
+    // const db = getFirestore(app);
     const navigation = useNavigation();
 
-    const [full_name, setFullName] = useState<String>('');
-    const [email, setEmail] = useState<String>('');
-    const [password, setPassword] = useState<String>('');
+    const [full_name, setFullName] = useState(null);
+    const [email, setEmail] = useState(null);
+    const [password, setPassword] = useState(null);
     const [fullNameError, setFullNameError] = useState(null)
     const [emailError, setEmailError] = useState(null)
     const [passwordError, setPasswordError] = useState(null)
 
-    const createNewUser = async (full_name, email, password) => {
-        try {
-            let newUser: User = {
-                full_name: full_name,
-                email: email,
-                password: password,
-            }
-            await addDoc(collection(db, "usuarios"), newUser);
-        } catch (error) {
-            console.error("Error adding document: ", error)
-        }
+    // const createNewUser = async (full_name, email, password) => {
+    //     try {
+    //         let newUser: User = {
+    //             full_name: full_name,
+    //             email: email,
+    //             password: password,
+    //         }
+    //         await addDoc(collection(db, "usuarios"), newUser);
+    //     } catch (error) {
+    //         console.error("Error adding document: ", error)
+    //     }
+    // }
+
+    const createUser = () => {
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                const user = userCredential.user;
+                // console.log(user);
+                setFullName('');
+                setEmail('');
+                setPassword('');
+                setFullNameError(null);
+                setEmailError(null);
+                setPasswordError(null);
+                Alert.alert('Sucesso', 'Cadastro realizado com sucesso', [
+                    { text: 'OK', onPress: () => navigation.navigate('Home') }
+                ], { cancelable: false })
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                console.log(errorMessage)
+            });
     }
 
     //Função para validar a entrada de password do usuário
-    function passwordValidate(password: String) {
+    function passwordValidate(password: string) {
         if (password.length < 7) { return false };
         if (!/[A-Z]/.test(password)) { return false };
         if (!/[a-z]/.test(password)) { return false };
@@ -49,13 +72,13 @@ export default function CreateAccount() {
     }
 
     //Função para validar a entrada de email do usuário
-    function emailValidate(email: String) {
+    function emailValidate(email: string) {
         var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(email.toLocaleLowerCase())
     }
 
     //Função para validar a entrada de nome do usuário
-    function nameValidate(name: String) {
+    function nameValidate(name: string) {
         if (/[0-9]/.test(name)) { return false };
         if (/[!@#$%^&*]/.test(name)) { return false };
         if (name.length < 7) { return false };
@@ -104,22 +127,7 @@ export default function CreateAccount() {
                 buttonStyle={styles.buttonRegister}
                 containerStyle={styles.buttonRegisterContainer}
                 titleStyle={styles.buttonRegisterTitle}
-                onPress={async () => {
-                    if (nameValidate(full_name) && emailValidate(email) && passwordValidate(password)) {
-                        await createNewUser(full_name, email, password);
-                        setFullName('');
-                        setEmail('');
-                        setPassword('');
-                        setFullNameError(null);
-                        setEmailError(null);
-                        setPasswordError(null);
-                        Alert.alert('Sucesso', 'Cadastro realizado com sucesso',[
-                            {text:'OK', onPress:() => navigation.navigate('Home')}
-                        ],{cancelable:false})
-                    } else {
-                        console.log('Erro ao tentar criar uma conta')
-                    }
-                }}
+                onPress={createUser}
             />
         </View>
     )

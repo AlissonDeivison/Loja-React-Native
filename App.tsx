@@ -9,9 +9,21 @@ import Market from "./src/pages/Market";
 import Icon from "react-native-vector-icons/AntDesign"
 import ShoppingCart from "./src/pages/Market/ShoppingCart";
 import { CartProvider } from "./src/pages/CartContext";
+import { getAuth, signOut } from 'firebase/auth';
 
 const App = () => {
   const Stack = createNativeStackNavigator();
+  const auth = getAuth();
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      console.log('Usuário desconectado com sucesso.');
+    } catch (error) {
+      console.error('Erro ao desconectar usuário:', error.message);
+    }
+  };
+
 
   return (
     <CartProvider>
@@ -29,7 +41,7 @@ const App = () => {
               headerBackVisible: false,
               headerTitleAlign: 'center',
               headerLeft: () => (<Icon name="shoppingcart" size={28} onPress={() => (navigation.navigate('ShoppingCart'))} />),
-              headerRight: () => (<Icon name="logout" size={28} onPress={() => (navigation.navigate('Login'))} />),
+              headerRight: () => (<Icon name="logout" size={28} onPress={() => { handleLogout(); navigation.navigate('Home'); }} />),
             }
           }}
             name="Market"

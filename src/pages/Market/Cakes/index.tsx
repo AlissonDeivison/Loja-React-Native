@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Text, View } from 'react-native'
 import NumeroFatias from './NumeroFatias'
 import TipoRecheio from './TipoRecheio'
 import Description from './Descricao';
 import { Button } from '@rneui/base';
 import styles from './styles';
+import { criarCarrinhoDeCompras } from '../../CartContext'
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 
 
@@ -28,11 +30,23 @@ function gerarProduto(fatias, recheio, descricao, orcamento) {
     return produto;
 }
 
+
 export default function Cakes({ setShoppingCart }) {
 
     const [fatias, setFatias] = useState(null)
     const [recheio, setRecheio] = useState(null)
     const [descricao, setDescricao] = useState(null)
+
+
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            const uid = user.uid;
+            console.log(uid)
+        } else {
+
+        }
+    });
 
     return (
         <View>
@@ -49,6 +63,8 @@ export default function Cakes({ setShoppingCart }) {
                     try {
                         const produto = gerarProduto(fatias, recheio, descricao, orcamento(fatias).toFixed(2));
                         setShoppingCart(oldCart => [...oldCart, produto]);
+                        criarCarrinhoDeCompras
+
                     } catch (err) {
                         console.log(err)
                     }

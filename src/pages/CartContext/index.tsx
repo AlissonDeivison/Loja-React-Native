@@ -1,6 +1,9 @@
-import app from '../../Config'
+import app from '../../Services'
 import { collection, doc, getFirestore, setDoc } from 'firebase/firestore';
 import React, { createContext, useState, Dispatch, SetStateAction } from 'react';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+
+
 
 export interface Produto {
   name: String,
@@ -14,22 +17,19 @@ interface CartContextType {
   setShoppingCart: Dispatch<SetStateAction<Produto[]>>;
 }
 
+const auth = getAuth();
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    const uid = user.uid;
+    // console.log(user)
+  } else {
 
-export const CartContext = createContext<CartContextType>({ shoppingCart: [], setShoppingCart: () => {} });
+  }
+});
 
-export const CartProvider: React.FC <{children: React.ReactNode}> = ({ children }) => {
-  const [shoppingCart, setShoppingCart] = useState<Produto[]>([]);
+export async function criarCarrinhoDeCompras(usuarioId, carrinhoDeCompras) {
 
-  return (
-    <CartContext.Provider value={{ shoppingCart, setShoppingCart }}>
-      {children}
-    </CartContext.Provider>
-  );
-};
-
-export async function criarCarrinhoDeCompras (usuarioId, carrinhoDeCompras){
   const db = getFirestore(app);
-  const user = doc(db, 'usuarios', usuarioId);
 
   const carrinhoDeComprasData = {
     ...carrinhoDeCompras,
@@ -39,3 +39,16 @@ export async function criarCarrinhoDeCompras (usuarioId, carrinhoDeCompras){
   const carrinhoDeComprasRef = doc(collection(db, 'carrinhoDeCompras'));
   await setDoc(carrinhoDeComprasRef, carrinhoDeComprasData)
 }
+
+export const CartContext = createContext<CartContextType>({ shoppingCart: [], setShoppingCart: () => { } });
+
+export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [shoppingCart, setShoppingCart] = useState<Produto[]>([]);
+
+  return (
+    <CartContext.Provider value={{ shoppingCart, setShoppingCart }}>
+      {children}
+    </CartContext.Provider>
+  );
+};
+
