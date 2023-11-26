@@ -1,3 +1,5 @@
+import app from '../../Config'
+import { collection, doc, getFirestore, setDoc } from 'firebase/firestore';
 import React, { createContext, useState, Dispatch, SetStateAction } from 'react';
 
 export interface Produto {
@@ -24,3 +26,16 @@ export const CartProvider: React.FC <{children: React.ReactNode}> = ({ children 
     </CartContext.Provider>
   );
 };
+
+export async function criarCarrinhoDeCompras (usuarioId, carrinhoDeCompras){
+  const db = getFirestore(app);
+  const user = doc(db, 'usuarios', usuarioId);
+
+  const carrinhoDeComprasData = {
+    ...carrinhoDeCompras,
+    usuario: usuarioId
+  };
+
+  const carrinhoDeComprasRef = doc(collection(db, 'carrinhoDeCompras'));
+  await setDoc(carrinhoDeComprasRef, carrinhoDeComprasData)
+}

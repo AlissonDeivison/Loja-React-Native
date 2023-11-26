@@ -7,7 +7,7 @@ export default function Description({onValueChange}) {
 
   return (
     <View>
-        <Text>Descreva seu bolo</Text>
+        <Text>Descreva a temática do bolo, ideias que você possui para o mesmo</Text>
         <TextInput style={styles.input} onChangeText={(text) => {
           onValueChange(text)
         }} />

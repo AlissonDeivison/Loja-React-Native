@@ -1,4 +1,3 @@
-
 import { Text, TextInput, View, Image } from 'react-native'
 import { Button } from '@rneui/base'
 import styles from './styles'
@@ -29,7 +28,7 @@ export default function Login({ navigation }: any) {
           source={require('../../../assets/iconv2.png')}
           style={styles.logo_img}
         />
-        <Text style={styles.text}>Jully's Cakes</Text>
+        <Text style={styles.text}>Jully's Cake</Text>
       </View>
       <View style={{ marginTop: '-30%' }}>
         <Text>Login</Text>

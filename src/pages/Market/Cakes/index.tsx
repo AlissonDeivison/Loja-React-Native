@@ -7,6 +7,7 @@ import { Button } from '@rneui/base';
 import styles from './styles';
 
 
+
 interface Produto {
     name: String,
     price: Number,
@@ -18,7 +19,6 @@ function orcamento(numeroFatias) {
     return numeroFatias * valorFatia;
 }
 
-
 function gerarProduto(fatias, recheio, descricao, orcamento) {
     const produto: Produto = {
         name: `Bolo de ${fatias} fatias com recheio de ${recheio}`,
@@ -27,6 +27,7 @@ function gerarProduto(fatias, recheio, descricao, orcamento) {
     };
     return produto;
 }
+
 export default function Cakes({ setShoppingCart }) {
 
     const [fatias, setFatias] = useState(null)
@@ -35,7 +36,7 @@ export default function Cakes({ setShoppingCart }) {
 
     return (
         <View>
-            <Text >Monte seu bolo</Text>
+            <Text>Monte seu bolo</Text>
             <NumeroFatias onValueChange={(value) => setFatias(value)} />
             <TipoRecheio onValueChange={(value) => setRecheio(value)} />
             <Description onValueChange={(value) => setDescricao(value)} />
@@ -48,7 +49,7 @@ export default function Cakes({ setShoppingCart }) {
                     try {
                         const produto = gerarProduto(fatias, recheio, descricao, orcamento(fatias).toFixed(2));
                         setShoppingCart(oldCart => [...oldCart, produto]);
-                    }catch (err){
+                    } catch (err) {
                         console.log(err)
                     }
                 }}

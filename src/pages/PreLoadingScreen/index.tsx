@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View } from 'react-native'
 import { Image } from 'react-native'
 import styles from './styles'
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient'
+import { collection, getDocs, getFirestore } from 'firebase/firestore';
+import app from '../../Config'
 
 
 
@@ -12,11 +14,18 @@ export default function PreLoadingScreen() {
   const navigation = useNavigation();
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      navigation.navigate('Home');
-    }, 2000); // Atraso de 2 segundos
-
-    return () => clearTimeout(timer); // Limpar o timer se o componente for desmontado
+    const tryConnection = async () => {
+      try {
+        const db = getFirestore(app);
+        const usersCollection = collection(db, 'usuarios');
+        await getDocs(usersCollection);
+        navigation.navigate('Home');
+        console.log('Conexão com o banco de dados bem sucedida')
+      } catch (error) {
+        console.error('Erro ao conectar ao servidor: ', error)
+      }
+    };
+    tryConnection();
   }, []);
 
 

@@ -1,6 +1,5 @@
 import { StyleSheet, TextStyle, ViewStyle } from "react-native";
 
-
 export interface Styles {
   buttonsContainer: ViewStyle,
   buttonRegister: ViewStyle,
@@ -20,6 +19,7 @@ const styles = StyleSheet.create({
       alignSelf:'center',
       marginBottom:'20%',
     },
+    
     input: {
       height: 40,
       width: "100%",

@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 40,
   },
+  
   input: {
     height: 40,
     width: "100%",
@@ -23,8 +24,17 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginTop: "3%",
     marginBottom: "5%",
-    borderRadius: 15
+    borderRadius: 15,
+    padding: 6
   },
+
+  errorMessage:{
+    textAlign:'center',
+    fontSize: 10,
+    marginTop: '-4%',
+    color: '#C80000'
+  },
+
   links: {
     marginLeft: 8,
     marginBottom: 10,
