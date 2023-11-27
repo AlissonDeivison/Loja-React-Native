@@ -14,6 +14,7 @@ interface Produto {
     name: String,
     price: Number,
     description: String,
+    userComment: String,
 }
 
 function orcamento(numeroFatias) {
@@ -21,11 +22,13 @@ function orcamento(numeroFatias) {
     return numeroFatias * valorFatia;
 }
 
-function gerarProduto(fatias, recheio, descricao, orcamento) {
+function gerarProduto(fatias, recheio:any, descricao, orcamento) {
+
     const produto: Produto = {
-        name: `Bolo de ${fatias} fatias com recheio de ${recheio}`,
+        name: `Bolo de ${fatias} fatias com recheio de ${recheio.title}`,
         price: orcamento,
-        description: descricao
+        description: recheio.description,
+        userComment: descricao,
     };
     return produto;
 }
@@ -36,7 +39,6 @@ export default function Cakes({ setShoppingCart }) {
     const [fatias, setFatias] = useState(null)
     const [recheio, setRecheio] = useState(null)
     const [descricao, setDescricao] = useState(null)
-
 
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {

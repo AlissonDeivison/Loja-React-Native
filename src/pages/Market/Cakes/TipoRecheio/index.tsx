@@ -1,75 +1,77 @@
-import React, { useState } from 'react'
-import { Text, View } from 'react-native';
-import uuid from 'react-native-uuid'
+import React, { useEffect, useState } from 'react'
+import { Text, Touchable, TouchableOpacity, View } from 'react-native';
 import styles from './styles';
-import { Dropdown } from 'react-native-element-dropdown';
-import AntDesign from '@expo/vector-icons/AntDesign';
 
-const recheios =
-    [
-        { "id": uuid.v4(), "tipo": "Brigadeiro" },
-        { "id": uuid.v4(), "tipo": "Bem casado" },
-        { "id": uuid.v4(), "tipo": "Ninho" },
-        { "id": uuid.v4(), "tipo": "Beijinho" },
-        { "id": uuid.v4(), "tipo": "Amendoim" },
-        { "id": uuid.v4(), "tipo": "Crocante" },
-    ];
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import { Card } from '@rneui/themed';
 
+import { getAuth } from 'firebase/auth';
+import { collection, getDocs, getFirestore } from 'firebase/firestore';
+import app from '../../../../Services'
 
-export default function TipoRecheio({onValueChange}) {
-        const [value, setValue] = useState(null);
-        const [isFocus, setIsFocus] = useState(false);
+interface IRecheio {
+    title: string,
+    image: string | undefined,
+    disponibility: boolean,
+    description: string,
+}
 
-        const renderLabel = () => {
-            if (value || isFocus) {
-                return (
-                    <Text style={[styles.label, isFocus && { color: 'blue' }]}>
-                        Selecione
-                    </Text>
-                );
+export default function TipoRecheio({ onValueChange }) {
+
+    const auth = getAuth();
+    const [recheiosData, setRecheiosData] = useState([])
+    const [recheioEscolhido, setRecheioEscolhido] = useState(null)
+    const [favorito, setFavorito] = useState({})
+
+    useEffect(() => {
+
+        const db = getFirestore(app);
+        const tryConnection = async () => {
+            try {
+                console.log('Conexão com o banco de dados bem sucedida')
+
+                const recheiosCollection = collection(db, 'recheios');
+                const recheiosSnapshot = await getDocs(recheiosCollection);
+
+                const recheios = recheiosSnapshot.docs.map(doc => doc.data());
+                setRecheiosData(recheios);
+            } catch (error) {
+                console.error('Erro ao conectar ao servidor: ', error)
             }
-            return null;
         };
+        tryConnection();
+    }, []);
 
-        return (
-            <View style={styles.container}>
-                {renderLabel()}
-                <Dropdown
-                    style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-                    placeholderStyle={styles.placeholderStyle}
-                    selectedTextStyle={styles.selectedTextStyle}
-                    inputSearchStyle={styles.inputSearchStyle}
-                    iconStyle={styles.iconStyle}
-                    data={recheios}
-                    search
-                    maxHeight={300}
-                    labelField="tipo"
-                    valueField="id"
-                    placeholder={!isFocus ? 'Tipo de Recheio' : '...'}
-                    searchPlaceholder="Buscar..."
-                    value={value}
-                    onFocus={() => setIsFocus(true)}
-                    onBlur={() => setIsFocus(false)}
-                    onChange={item => {
-                        setValue(item.value);
-                        setIsFocus(false);
-                        if (onValueChange) {
-                            onValueChange(item.tipo);
-                        }
-                    }}
-                    renderLeftIcon={() => (
-                        <AntDesign
-                            style={styles.icon}
-                            color={isFocus ? 'blue' : 'black'}
-                            name="Safety"
-                            size={20}
-                        />
-                    )}
-                />
-                
-            </View>
-        );
-    };
+    const toggleFavorito = (i) => {
+        setFavorito({ ...favorito, [i]: !favorito[i] })
+    }
+
+    useEffect(() => {
+        onValueChange(recheioEscolhido);
+        console.log(recheioEscolhido);
+    }, [recheioEscolhido])
+
+
+
+    return (
+        <View style={styles.container}>
+            {recheiosData && recheiosData.map((recheio: IRecheio, i: number) => (
+                <TouchableOpacity key={i} onPress={() => setRecheioEscolhido(recheio)}>
+                    <View style={[styles.card, recheioEscolhido === recheio ? styles.selectedBackground : null]}>
+                        <Text style={styles.cardTitle}>Recheio de {recheio.title}</Text>
+                        <Text style={styles.cardText}>{recheio.description}</Text>
+                        <View style={styles.favorite}>
+                            <TouchableOpacity onPress={() => toggleFavorito(i)}>
+                                {favorito[i] ? <AntDesign name="heart" size={24} color="red" /> : <AntDesign name="hearto" size={24} color="black" />}
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </TouchableOpacity>
+            ))}
+        </View>
+    );
+
+};
 
 
 

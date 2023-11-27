@@ -9,7 +9,8 @@ export interface Produto {
   name: String,
   price: Number,
   description: String,
-  image: String
+  image: String,
+  userComment: String,
 }
 
 interface CartContextType {

@@ -15,9 +15,9 @@ export default function ShoppingCart() {
         <Card key={index}>
           <Card.Title>{produto.name}</Card.Title>
           <Card.Divider />
-          <Text >Descição informada pelo cliente: {produto.description}</Text>
+          <Text >Descrição do recheio: {produto.description}</Text>
+          <Text >Comentário do usuário: {produto.userComment}</Text>
           <Text >Orçamento: R$ {produto.price.toString()}</Text>
-          <Text >Descição informada pelo cliente: {produto.description}</Text>
         </Card>
         )
       )}
