@@ -7,7 +7,7 @@ import { Card } from '@rneui/themed';
 
 import { getAuth } from 'firebase/auth';
 import { collection, getDocs, getFirestore } from 'firebase/firestore';
-import app from '../../../../Services'
+import {app} from '../../../../Services'
 
 interface IRecheio {
     title: string,

@@ -1,77 +1,59 @@
-import React, { useState } from 'react'
-import { Text, View } from 'react-native';
-import uuid from 'react-native-uuid'
+import React, { useEffect, useState } from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
+import { getAuth } from 'firebase/auth';
+import { collection, getDocs, getFirestore } from 'firebase/firestore';
+import uuid from 'react-native-uuid';
 import styles from './styles';
-import { Dropdown } from 'react-native-element-dropdown';
-import AntDesign from '@expo/vector-icons/AntDesign';
+import {app} from '../../../../Services';
 
-const tamanhos =
-    [
-        { "id": uuid.v4(), "numero_fatias": '10' },
-        { "id": uuid.v4(), "numero_fatias": '15' },
-        { "id": uuid.v4(), "numero_fatias": '20' },
-        { "id": uuid.v4(), "numero_fatias": '25' },
-        { "id": uuid.v4(), "numero_fatias": '30' },
-        { "id": uuid.v4(), "numero_fatias": '40' },
-        { "id": uuid.v4(), "numero_fatias": '50' },
-    ];
+interface ITamanhos {
+  id: string;
+  tamanho: number;
+}
 
-export default function NumeroFatias({onValueChange}) {
-    
-        const [value, setValue] = useState(null);
-        const [isFocus, setIsFocus] = useState(false);
+export default function NumeroFatias({ onValueChange }) {
+  const auth = getAuth();
+  const [qtdFatias, setQtdFatias] = useState<ITamanhos[]>([]);
+  const [qtdEscolhida, setQtdEscolhida] = useState<ITamanhos | null>(null);
 
-        const renderLabel = () => {
-            if (value || isFocus) {
-                return (
-                    <Text style={[styles.label, isFocus && { color: 'blue' }]}>
-                        Selecione
-                    </Text>
-                );
-            }
-            return null;
-        };
+  useEffect(() => {
+    const db = getFirestore(app);
+    const tryConnection = async () => {
+      try {
+        console.log('Conexão com o banco de dados bem sucedida');
 
-        return (
-            <View style={styles.container}>
-                {renderLabel()}
-                <Dropdown
-                    style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-                    placeholderStyle={styles.placeholderStyle}
-                    selectedTextStyle={styles.selectedTextStyle}
-                    inputSearchStyle={styles.inputSearchStyle}
-                    iconStyle={styles.iconStyle}
-                    data={tamanhos}
-                    search
-                    maxHeight={300}
-                    labelField="numero_fatias"
-                    valueField="id"
-                    placeholder={!isFocus ? 'Quantidade de fatias' : '...'}
-                    searchPlaceholder="Buscar..."
-                    value={value}
-                    onFocus={() => setIsFocus(true)}
-                    onBlur={() => setIsFocus(false)}
-                    onChange={item => {
-                        setValue(item.value);
-                        setIsFocus(false);
-                        if (onValueChange) {
-                            onValueChange(item.numero_fatias);
-                        }
-                    }}
-                    renderLeftIcon={() => (
-                        <AntDesign
-                            style={styles.icon}
-                            color={isFocus ? 'blue' : 'black'}
-                            name="Safety"
-                            size={20}
-                        />
-                    )}
-                />
-            </View>
-        );
+        const fatiasCollection = collection(db, 'tamanhos');
+        const fatiasSnapshot = await getDocs(fatiasCollection);
+
+        const fatias = fatiasSnapshot.docs.map((doc) => {
+          return { id: doc.id, ...doc.data() } as ITamanhos;
+        });
+
+        setQtdFatias(fatias);
+      } catch (error) {
+        console.error('Erro ao conectar ao servidor: ', error);
+      }
     };
+    tryConnection();
+  }, []);
 
+  useEffect(() => {
+    onValueChange(qtdEscolhida);
+  }, [qtdEscolhida, onValueChange]);
 
-
-
-
+  return (
+    <View style={styles.container}>
+      {qtdFatias &&
+        qtdFatias
+          .slice()
+          .sort((a, b) => a.tamanho - b.tamanho)
+          .map((qtd: ITamanhos, i: number) => (
+            <TouchableOpacity key={qtd.id} onPress={() => setQtdEscolhida(qtd)}>
+              <View style={[styles.card, qtdEscolhida === qtd ? styles.selectedBackground : null]}>
+                <Text>{qtd.tamanho} fatias</Text>
+              </View>
+            </TouchableOpacity>
+          ))}
+    </View>
+  );
+}

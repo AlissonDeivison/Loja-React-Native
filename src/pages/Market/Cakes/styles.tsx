@@ -13,6 +13,24 @@ const styles = StyleSheet.create({
   buttonAddToCartTitle: {
     fontWeight: 'bold',
     color:'#FFFFFF',
+  },
+  textTitle:{
+    fontSize:30,
+    alignSelf:'center',
+    fontWeight:'500',
+    color:'#B398D6'
+  },
+
+  inputEscolha:{
+    fontSize:20,
+    alignSelf:'center',
+    fontWeight:'200',
+    marginBottom:8
+  },
+
+  TitleContainer:{
+    backgroundColor:'#B398D6',
+    borderRadius:20,
   }
 });
 

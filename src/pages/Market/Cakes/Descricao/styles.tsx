@@ -11,12 +11,16 @@ const styles = StyleSheet.create({
     marginTop: "3%",
     marginBottom: "5%",
     borderRadius: 15,
-    padding: 8
+    padding: 8,
+    textAlignVertical: 'top'
   },
   text: {
     fontSize: 28,
     color: "#1A1A1A",
   },
+  aviso:{
+    fontSize:12
+  }
 });
 
 export default styles;

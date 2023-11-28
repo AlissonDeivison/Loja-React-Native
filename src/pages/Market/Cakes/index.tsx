@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Text, View } from 'react-native'
+import { Alert, Text, View } from 'react-native'
 import NumeroFatias from './NumeroFatias'
 import TipoRecheio from './TipoRecheio'
 import Description from './Descricao';
@@ -7,6 +7,7 @@ import { Button } from '@rneui/base';
 import styles from './styles';
 import { criarCarrinhoDeCompras } from '../../CartContext'
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useNavigation } from '@react-navigation/native';
 
 
 
@@ -22,10 +23,10 @@ function orcamento(numeroFatias) {
     return numeroFatias * valorFatia;
 }
 
-function gerarProduto(fatias, recheio:any, descricao, orcamento) {
+function gerarProduto(fatias: any, recheio: any, descricao, orcamento) {
 
     const produto: Produto = {
-        name: `Bolo de ${fatias} fatias com recheio de ${recheio.title}`,
+        name: `Bolo de ${fatias.tamanho} fatias com recheio de ${recheio.title}`,
         price: orcamento,
         description: recheio.description,
         userComment: descricao,
@@ -36,25 +37,50 @@ function gerarProduto(fatias, recheio:any, descricao, orcamento) {
 
 export default function Cakes({ setShoppingCart }) {
 
-    const [fatias, setFatias] = useState(null)
-    const [recheio, setRecheio] = useState(null)
-    const [descricao, setDescricao] = useState(null)
+    const navigation = useNavigation();
+
+
+    const [fatias, setFatias] = useState(null);
+    const [recheio, setRecheio] = useState(null);
+    const [descricao, setDescricao] = useState(null);
 
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
         if (user) {
             const uid = user.uid;
-            console.log(uid)
         } else {
 
         }
     });
 
+    const resetForm = () => {
+        setFatias(null);
+        setRecheio(null);
+        setDescricao(null);
+    };
+
     return (
         <View>
-            <Text>Monte seu bolo</Text>
+            <View>
+                <Text style={styles.textTitle}>MAKE YOUR CAKE</Text>
+            </View>
+
+            <View>
+                <Text style={styles.inputEscolha}>Escolha o número de fatias</Text>
+            </View>
+
             <NumeroFatias onValueChange={(value) => setFatias(value)} />
+
+            <View>
+                <Text style={styles.inputEscolha}>Escolha seu recheio</Text>
+            </View>
+
             <TipoRecheio onValueChange={(value) => setRecheio(value)} />
+
+            <View>
+                <Text style={styles.inputEscolha}>Agora descreva a temática do seu bolo</Text>
+            </View>
+
             <Description onValueChange={(value) => setDescricao(value)} />
             <Button
                 title="Adicionar ao carrinho"
@@ -63,9 +89,25 @@ export default function Cakes({ setShoppingCart }) {
                 titleStyle={styles.buttonAddToCartTitle}
                 onPress={() => {
                     try {
-                        const produto = gerarProduto(fatias, recheio, descricao, orcamento(fatias).toFixed(2));
+                        const produto = gerarProduto(fatias, recheio, descricao, orcamento(fatias.tamanho).toFixed(2));
                         setShoppingCart(oldCart => [...oldCart, produto]);
-                        criarCarrinhoDeCompras
+
+                        resetForm();
+
+                        Alert.alert(
+                            'Produto adicionado ao carrinho',
+                            'Seu produto foi adicionado ao carrinho com sucesso!',
+                            [
+                                {
+                                    text: 'OK',
+                                    onPress: () => {
+                                        // Redirecionar para a tela do carrinho
+                                        navigation.navigate('ShoppingCart'); // Substitua 'Carrinho' pelo nome da sua tela de carrinho
+                                    },
+                                },
+                            ]
+                        );
+
 
                     } catch (err) {
                         console.log(err)
