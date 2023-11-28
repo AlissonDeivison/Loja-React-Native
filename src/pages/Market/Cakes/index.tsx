@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Alert, Text, View } from 'react-native'
 import NumeroFatias from './NumeroFatias'
 import TipoRecheio from './TipoRecheio'
@@ -8,6 +8,9 @@ import styles from './styles';
 import { criarCarrinhoDeCompras } from '../../CartContext'
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigation } from '@react-navigation/native';
+import { collection, getFirestore, addDoc, setDoc, doc } from 'firebase/firestore';
+import { app } from '../../../Services';
+
 
 
 
@@ -39,26 +42,33 @@ export default function Cakes({ setShoppingCart }) {
 
     const navigation = useNavigation();
 
-
     const [fatias, setFatias] = useState(null);
     const [recheio, setRecheio] = useState(null);
     const [descricao, setDescricao] = useState(null);
 
     const auth = getAuth();
+
+    let uid = null; // declare uid fora do callback
+
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            const uid = user.uid;
-        } else {
-
+            uid = user.uid; // atribua o valor à variável uid externa
+            console.log(uid);
         }
     });
+    
+    const salvarCarrinho = async (produtos) => {
+        const db = getFirestore(app);
+        await setDoc(doc(db, 'informacoesDoUsuario', uid), { produtos });
+        console.log("Documento adicionado com ID: ", uid);
+    }
+    
 
     const resetForm = () => {
         setFatias(null);
         setRecheio(null);
         setDescricao(null);
     };
-
     return (
         <View>
             <View>
@@ -93,6 +103,7 @@ export default function Cakes({ setShoppingCart }) {
                         setShoppingCart(oldCart => [...oldCart, produto]);
 
                         resetForm();
+                        salvarCarrinho(produto);
 
                         Alert.alert(
                             'Produto adicionado ao carrinho',
