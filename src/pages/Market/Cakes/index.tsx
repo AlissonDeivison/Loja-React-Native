@@ -59,7 +59,7 @@ export default function Cakes({ setShoppingCart }) {
     
     const salvarCarrinho = async (produtos) => {
         const db = getFirestore(app);
-        await setDoc(doc(db, 'informacoesDoUsuario', uid), { produtos });
+        await setDoc(doc(db, 'carrinhosDeCompra', uid), { produtos });
         console.log("Documento adicionado com ID: ", uid);
     }
     
