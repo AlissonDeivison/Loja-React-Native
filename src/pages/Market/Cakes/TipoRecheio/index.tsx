@@ -5,9 +5,9 @@ import styles from './styles';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { Card } from '@rneui/themed';
 
-import { getAuth } from 'firebase/auth';
-import { collection, getDocs, getFirestore } from 'firebase/firestore';
-import {app} from '../../../../Services'
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { collection, doc, getDocs, getFirestore, setDoc } from 'firebase/firestore';
+import { app } from '../../../../Services'
 
 interface IRecheio {
     title: string,
@@ -19,9 +19,19 @@ interface IRecheio {
 export default function TipoRecheio({ onValueChange }) {
 
     const auth = getAuth();
+
     const [recheiosData, setRecheiosData] = useState([])
     const [recheioEscolhido, setRecheioEscolhido] = useState(null)
     const [favorito, setFavorito] = useState({})
+
+    let uid = null;
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            uid = user.uid;
+            console.log(uid);
+        }
+    });
 
     useEffect(() => {
 
@@ -42,9 +52,25 @@ export default function TipoRecheio({ onValueChange }) {
         tryConnection();
     }, []);
 
+
     const toggleFavorito = (i) => {
-        setFavorito({ ...favorito, [i]: !favorito[i] })
-    }
+        setFavorito((prevFavorito) => {
+            const novoFavorito = { ...prevFavorito, [i]: !prevFavorito[i] };
+            adicionarFavorito(novoFavorito);
+            return novoFavorito;
+        });
+    };
+
+
+    const adicionarFavorito = async (favorito) => {
+
+        console.log('Favorito 1', favorito);
+        const db = getFirestore(app);
+        await setDoc(doc(db, 'informacoesDoUsuario', uid), { favorito });
+        console.log("Documento adicionado com ID: ", uid);
+
+    };
+
 
     useEffect(() => {
         onValueChange(recheioEscolhido);
@@ -72,8 +98,3 @@ export default function TipoRecheio({ onValueChange }) {
     );
 
 };
-
-
-
-
-

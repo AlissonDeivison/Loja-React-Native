@@ -1,17 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Alert, Text, View } from 'react-native'
 import NumeroFatias from './NumeroFatias'
 import TipoRecheio from './TipoRecheio'
 import Description from './Descricao';
 import { Button } from '@rneui/base';
 import styles from './styles';
-import { criarCarrinhoDeCompras } from '../../CartContext'
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigation } from '@react-navigation/native';
-import { collection, getFirestore, addDoc, setDoc, doc } from 'firebase/firestore';
+import {  getFirestore, setDoc, doc } from 'firebase/firestore';
 import { app } from '../../../Services';
-
-
 
 
 interface Produto {
@@ -48,12 +45,11 @@ export default function Cakes({ setShoppingCart }) {
 
     const auth = getAuth();
 
-    let uid = null; // declare uid fora do callback
+    let uid = null; 
 
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            uid = user.uid; // atribua o valor à variável uid externa
-            console.log(uid);
+            uid = user.uid; 
         }
     });
     
