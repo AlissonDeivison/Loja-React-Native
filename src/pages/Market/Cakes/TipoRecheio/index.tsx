@@ -76,14 +76,13 @@ export default function TipoRecheio({ onValueChange }) {
     };
 
     // Apenas para depuração
-    // useEffect(() => { 
-    //     onValueChange(recheioEscolhido);
-    //     console.log(recheioEscolhido);
-    // }, [recheioEscolhido]) 
+    useEffect(() => { 
+        onValueChange(recheioEscolhido);
+    }, [recheioEscolhido]) 
 
-    useEffect(()=>{
-        console.log(favoritosDoUsuario[1]);
-    },[favoritosDoUsuario])
+    // useEffect(()=>{
+    //     console.log(favoritosDoUsuario[1]);
+    // },[favoritosDoUsuario])
 
     return (
         <View style={styles.container}>
