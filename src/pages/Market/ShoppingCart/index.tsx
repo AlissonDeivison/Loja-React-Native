@@ -21,7 +21,7 @@ export default function ShoppingCart() {
   onAuthStateChanged(auth, (user) => {
     if (user) {
       uid = user.uid;
-      console.log(uid);
+      //console.log(uid);
     }
   });
 
@@ -43,11 +43,6 @@ export default function ShoppingCart() {
     tryConnection();
   }, []);
 
-
-  // useEffect(() => {
-  //   console.log('Produto criado:', shoppingCart)
-  //   // console.log(shoppingCart.map(produto => console.log(produto)))
-  // }, [shoppingCart])
 
   const limparCarrinho = async () => {
 

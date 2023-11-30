@@ -4,6 +4,7 @@ import styles from './styles';
 import Cakes from './Cakes';
 import { CartContext } from '../CartContext';
 
+
 export default function Market() {
 
   const {shoppingCart, setShoppingCart} = useContext(CartContext)

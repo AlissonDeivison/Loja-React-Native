@@ -20,11 +20,8 @@ export default function NumeroFatias({ onValueChange }) {
     const db = getFirestore(app);
     const tryConnection = async () => {
       try {
-        console.log('Conexão com o banco de dados bem sucedida');
-
         const fatiasCollection = collection(db, 'tamanhos');
         const fatiasSnapshot = await getDocs(fatiasCollection);
-
         const fatias = fatiasSnapshot.docs.map((doc) => {
           return { id: doc.id, ...doc.data() } as ITamanhos;
         });
