@@ -70,19 +70,24 @@ export default function TipoRecheio({ onValueChange }) {
     //Adiciona o favorito ao banco 
     const adicionarFavorito = async (favorito) => {
         const db = getFirestore(app);
-        await setDoc(doc(db, 'informacoesDoUsuario', uid), { favorito });
+        await setDoc(doc(db, 'favoritos', uid), { favorito });
         //console.log("Documento adicionado com ID: ", uid);
 
     };
+
 
     // Apenas para depuração
     useEffect(() => { 
         onValueChange(recheioEscolhido);
     }, [recheioEscolhido]) 
 
-    // useEffect(()=>{
-    //     console.log(favoritosDoUsuario[1]);
-    // },[favoritosDoUsuario])
+    useEffect(()=>{
+        console.log(favorito);
+    },[favorito])
+
+    const arrayDeFavoritos = (favorito) => {
+
+    }
 
     return (
         <View style={styles.container}>
