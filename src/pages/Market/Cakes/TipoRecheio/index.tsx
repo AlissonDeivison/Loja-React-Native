@@ -5,7 +5,7 @@ import styles from './styles';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { collection, doc, getDocs, getFirestore, setDoc } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, getFirestore, setDoc } from 'firebase/firestore';
 import { app } from '../../../../Services'
 
 interface IRecheio {
@@ -22,7 +22,8 @@ export default function TipoRecheio({ onValueChange }) {
     const [recheiosData, setRecheiosData] = useState([]);
     const [recheioEscolhido, setRecheioEscolhido] = useState(null);
     const [favorito, setFavorito] = useState([]);
-    const [favoritosDoUsuario, setFavoritosDoUsuario] = useState([]);
+    const [favoritosDoUsuario, setFavoritosDoUsuario] = useState();
+    const [recarregar, setRecarregar] = useState(false)
 
     let uid = null;
 
@@ -34,60 +35,67 @@ export default function TipoRecheio({ onValueChange }) {
     });
 
     useEffect(() => {
-
         const db = getFirestore(app);
+
         const tryConnection = async () => {
             try {
-                console.log('Conexão com o banco de dados bem sucedida')
+                console.log('Conexão com o banco de dados bem sucedida');
 
+                // Carrega os recheios
                 const recheiosCollection = collection(db, 'recheios');
                 const recheiosSnapshot = await getDocs(recheiosCollection);
                 const recheios = recheiosSnapshot.docs.map(doc => doc.data());
                 setRecheiosData(recheios);
 
+                // Carrega os favoritos do usuário logado
                 const favoritosCollection = collection(db, 'informacoesDoUsuario');
-                const favoritosSnapshot = await getDocs(favoritosCollection);
+                const favoritosDoc = doc(favoritosCollection, uid);
+                const favoritosSnapshot = await getDoc(favoritosDoc);
 
-                const favoritosArray = favoritosSnapshot.docs.map(doc => doc.data().favorito);
-
-                setFavoritosDoUsuario(favoritosArray);
+                if (favoritosSnapshot.exists()) {
+                    // Se o documento existir, você pode acessar os dados assim:
+                    const favoritosDoUsuarioLogado = favoritosSnapshot.data();
+                    //console.log('Favoritos do usuário logado:', favoritosDoUsuarioLogado);
+                    setFavoritosDoUsuario(favoritosDoUsuarioLogado)
+                } else {
+                    console.log('Documento de favoritos não encontrado para o usuário:', uid);
+                }
             } catch (error) {
-                console.error('Erro ao conectar ao servidor: ', error)
+                console.error('Erro ao conectar ao servidor: ', error);
             }
         };
+
         tryConnection();
-    }, []);
+    }, [uid,favorito]);
 
 
-    const toggleFavorito = (i) => {
-        setFavorito((prevFavorito) => {
-            const novoFavorito = { ...prevFavorito, [i]: !prevFavorito[i] };
-            adicionarFavorito(novoFavorito);
-            return novoFavorito;
-        });
-    };
+    // const toggleFavorito = (recheio) => {
+    //     setFavorito(() => {
+    //       const novoFavorito = { ...recheio, recheio };
+    //       adicionarFavorito();
+    //       return novoFavorito;
+    //     });
+    //   };
 
     //Adiciona o favorito ao banco 
-    const adicionarFavorito = async (favorito) => {
+    const adicionarFavorito = async (recheio) => {
         const db = getFirestore(app);
-        await setDoc(doc(db, 'favoritos', uid), { favorito });
+        setFavorito(recheio)
+        await setDoc(doc(db, 'informacoesDoUsuario', uid), recheio);
+        setRecarregar(true);
         //console.log("Documento adicionado com ID: ", uid);
-
     };
 
 
     // Apenas para depuração
-    useEffect(() => { 
+    useEffect(() => {
         onValueChange(recheioEscolhido);
-    }, [recheioEscolhido]) 
+        console.log(recheioEscolhido)
+    }, [recheioEscolhido])
 
-    useEffect(()=>{
-        console.log(favorito);
-    },[favorito])
-
-    const arrayDeFavoritos = (favorito) => {
-
-    }
+    useEffect(() => {
+        onValueChange(recarregar);
+    }, [recarregar]);
 
     return (
         <View style={styles.container}>
@@ -97,20 +105,20 @@ export default function TipoRecheio({ onValueChange }) {
                         <Text style={styles.cardTitle}>Recheio de {recheio.title}</Text>
                         <Text style={styles.cardText}>{recheio.description}</Text>
                         <View style={styles.favorite}>
-                            <TouchableOpacity onPress={() => toggleFavorito(i)}>
-
-                                {favorito[i] ? (
+                            <TouchableOpacity key={i} onPress={() => adicionarFavorito(recheio)}>
+                                {/* Renderização do ícone de favorito baseado na comparação */}
+                                {favoritosDoUsuario && favoritosDoUsuario.title === recheio.title ? (
                                     <AntDesign name="heart" size={24} color="red" />
                                 ) : (
                                     <AntDesign name="hearto" size={24} color="black" />
                                 )}
-
                             </TouchableOpacity>
                         </View>
                     </View>
                 </TouchableOpacity>
             ))}
         </View>
+
     );
 
 };

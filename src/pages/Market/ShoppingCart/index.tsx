@@ -44,10 +44,10 @@ export default function ShoppingCart() {
   }, []);
 
 
-  useEffect(() => {
-    console.log('Produto criado:', shoppingCart)
-    // console.log(shoppingCart.map(produto => console.log(produto)))
-  }, [shoppingCart])
+  // useEffect(() => {
+  //   console.log('Produto criado:', shoppingCart)
+  //   // console.log(shoppingCart.map(produto => console.log(produto)))
+  // }, [shoppingCart])
 
   const limparCarrinho = async () => {
 
