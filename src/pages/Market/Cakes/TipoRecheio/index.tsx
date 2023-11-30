@@ -22,8 +22,7 @@ export default function TipoRecheio({ onValueChange }) {
     const [recheiosData, setRecheiosData] = useState([]);
     const [recheioEscolhido, setRecheioEscolhido] = useState(null);
     const [favorito, setFavorito] = useState([]);
-    const [favoritosDoUsuario, setFavoritosDoUsuario] = useState();
-    const [recarregar, setRecarregar] = useState(false)
+    const [favoritosDoUsuario, setFavoritosDoUsuario] = useState<IRecheio>({} as IRecheio);
 
     let uid = null;
 
@@ -36,11 +35,8 @@ export default function TipoRecheio({ onValueChange }) {
 
     useEffect(() => {
         const db = getFirestore(app);
-
         const tryConnection = async () => {
             try {
-                console.log('Conexão com o banco de dados bem sucedida');
-
                 // Carrega os recheios
                 const recheiosCollection = collection(db, 'recheios');
                 const recheiosSnapshot = await getDocs(recheiosCollection);
@@ -69,33 +65,19 @@ export default function TipoRecheio({ onValueChange }) {
     }, [uid,favorito]);
 
 
-    // const toggleFavorito = (recheio) => {
-    //     setFavorito(() => {
-    //       const novoFavorito = { ...recheio, recheio };
-    //       adicionarFavorito();
-    //       return novoFavorito;
-    //     });
-    //   };
-
     //Adiciona o favorito ao banco 
     const adicionarFavorito = async (recheio) => {
         const db = getFirestore(app);
         setFavorito(recheio)
         await setDoc(doc(db, 'informacoesDoUsuario', uid), recheio);
-        setRecarregar(true);
         //console.log("Documento adicionado com ID: ", uid);
     };
 
-
-    // Apenas para depuração
     useEffect(() => {
         onValueChange(recheioEscolhido);
-        console.log(recheioEscolhido)
+        //console.log(recheioEscolhido)
     }, [recheioEscolhido])
 
-    useEffect(() => {
-        onValueChange(recarregar);
-    }, [recarregar]);
 
     return (
         <View style={styles.container}>
